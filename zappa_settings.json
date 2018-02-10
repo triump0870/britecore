@@ -1,0 +1,14 @@
+{
+    "dev": {
+        "aws_region": "us-east-1", 
+        "django_settings": "britecore.settings", 
+        "profile_name": "default", 
+        "project_name": "britecore", 
+        "runtime": "python2.7", 
+        "s3_bucket": "zappa-britecore-0870",
+
+        "environment_variables": {
+            "DATABASE_URL": "psql://britecore:britecore@britecore.chx0c4al4qnv.us-east-2.rds.amazonaws.com:5432/britecore"
+        }
+    }
+}
