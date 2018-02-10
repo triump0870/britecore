@@ -34,9 +34,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third-party apps
-    'payslip',
+    'rest_framework',
     'bootstrapform',
-    'app'
+    'authtools',
+
+    # Local apps
+    'app',
+    'apis'
 ]
 
 MIDDLEWARE = [
@@ -135,3 +139,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Authentication settings
+AUTH_USER_MODEL = 'authtools.User'
