@@ -18,5 +18,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^app/', include('payslip.urls')),
+    url(r'^app/', include('app.urls', namespace='app')),
+    url(r'^api/', include('apis.urls', namespace='api')),
 ]
