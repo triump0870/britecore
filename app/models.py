@@ -4,6 +4,8 @@ from django.db import models
 from django.utils.timezone import localtime, now
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.postgres.fields import JSONField
+import json
 
 FIELDCHOICES = (
     ('text', 'Text'),
@@ -32,13 +34,20 @@ class RiskField(models.Model):
         max_length=100,
         blank=True, null=True,
         verbose_name=_('Description'),
-        help_text=_('Type of the field')
+        help_text=_('Description for the risk field.')
     )
 
     type = models.CharField(
         max_length=50,
         choices=FIELDCHOICES,
         help_text=_('Field type choices')
+    )
+
+    format = models.CharField(
+        max_length=10,
+        help_text=_('If date-field, specify the format'),
+        default = '',
+        blank=True, null=True
     )
 
     class Meta:
@@ -103,6 +112,10 @@ class Risk(models.Model):
         verbose_name=_('Risk type'),
         related_name='risks',
     )
+
+    data = JSONField(default='{]',
+                     help_text=_('Data for the insurance. Default Null'),
+                     blank=True, null=True)
 
     def __str__(self):
         return str(self.pk)
