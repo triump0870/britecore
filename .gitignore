@@ -60,3 +60,4 @@ Desktop.ini
 .idea/
 *.rdb
 *.pid
+dev_settings.py
