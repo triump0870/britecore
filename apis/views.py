@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from app.models import *
 from apis.serializers import *
 from rest_framework.decorators import api_view
@@ -22,6 +22,21 @@ class RiskTypeListCreateAPI(ListCreateAPIView):
 
 
 class RiskListCreateAPI(ListCreateAPIView):
+    queryset = Risk.objects.all()
+    serializer_class = RiskSerializer
+
+
+class RiskTypeRetrieveUpdateDestroyAPI(RetrieveUpdateDestroyAPIView):
+    queryset = RiskType.objects.all()
+    serializer_class = RiskTypeSerializer
+
+
+class RiskFieldsRetrieveUpdateDestroyAPI(RetrieveUpdateDestroyAPIView):
+    queryset = RiskField.objects.all()
+    serializer_class = RiskFieldSerializer
+
+
+class RiskRetrieveUpdateDestroyAPI(RetrieveUpdateDestroyAPIView):
     queryset = Risk.objects.all()
     serializer_class = RiskSerializer
 
