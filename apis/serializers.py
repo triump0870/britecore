@@ -1,6 +1,6 @@
 import json
 
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, ValidationError
 from django.utils.text import slugify
 from django.db.models import Q
 
@@ -11,6 +11,12 @@ class RiskFieldSerializer(ModelSerializer):
     class Meta:
         model = RiskField
         fields = ('name', 'slug', 'type')
+
+    def validate(self, attrs):
+        name = attrs['name']
+        if RiskField.objects.filter(Q(name=name) | Q(slug=slugify(name))).exists():
+            raise ValidationError({'name': 'Risk Field name [%s] already exists' % name})
+        return attrs
 
 
 class RiskTypeSerializer(ModelSerializer):
