@@ -61,3 +61,4 @@ Desktop.ini
 *.rdb
 *.pid
 dev_settings.py
+secret.json
