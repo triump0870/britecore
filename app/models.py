@@ -1,17 +1,15 @@
 """Models for the ``app`` application."""
-from django.conf import settings
 from django.db import models
-from django.utils.timezone import localtime, now
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.postgres.fields import JSONField
-import json
+from django.utils.text import slugify
 
 FIELDCHOICES = (
     ('text', 'Text'),
     ('number', 'Number'),
     ('date', 'Date'),
-    ('enum', 'Enum')
+    ('checkbox', 'Enum')
 )
 
 
@@ -30,6 +28,11 @@ class RiskField(models.Model):
         verbose_name=_('Name'),
     )
 
+    slug = models.SlugField(
+        max_length=50,
+        blank=True, null=True
+    )
+
     description = models.CharField(
         max_length=100,
         blank=True, null=True,
@@ -43,18 +46,16 @@ class RiskField(models.Model):
         help_text=_('Field type choices')
     )
 
-    format = models.CharField(
-        max_length=10,
-        help_text=_('If date-field, specify the format'),
-        default = '',
-        blank=True, null=True
-    )
-
     class Meta:
         ordering = ['name', ]
 
     def __str__(self):
         return '{0}'.format(self.name)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super(RiskField, self).save(*args, **kwargs)
 
 
 @python_2_unicode_compatible
@@ -80,7 +81,7 @@ class RiskType(models.Model):
     risk_fields = models.ManyToManyField(
         'app.RiskField',
         verbose_name=_('Risk fields'),
-        blank=True,
+        blank=True
     )
 
     class Meta:
