@@ -6,7 +6,7 @@ import json
 class RiskFieldSerializer(ModelSerializer):
     class Meta:
         model = RiskField
-        fields = '__all__'
+        fields = ('name', 'type')
 
 
 class RiskTypeSerializer(ModelSerializer):
@@ -14,7 +14,7 @@ class RiskTypeSerializer(ModelSerializer):
 
     class Meta:
         model = RiskType
-        fields = ('id', 'description', 'risk_field_list')
+        fields = ('id', 'description', 'name', 'risk_field_list')
 
 
 class RiskSerializer(ModelSerializer):
