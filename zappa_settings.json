@@ -1,14 +1,16 @@
 {
     "dev": {
-        "aws_region": "us-east-1", 
+        "aws_region": "us-east-2",
         "django_settings": "britecore.settings", 
         "profile_name": "default", 
         "project_name": "britecore", 
         "runtime": "python2.7", 
-        "s3_bucket": "zappa-britecore-0870",
-
-        "environment_variables": {
-            "DATABASE_URL": "psql://britecore:britecore@britecore.chx0c4al4qnv.us-east-2.rds.amazonaws.com:5432/britecore"
+        "s3_bucket": "zappa-britecore-2",
+        "delete_local_zip": false,
+        "exclude": ["dev_settings.py", "payslip/", "dockerize/"],
+        "vpc_config" : {
+            "SubnetIds": [ "subnet-1ce25851", "subnet-88aed3f3", "subnet-14d6e47d" ], // use the private subnet
+            "SecurityGroupIds": [ "sg-63c0600b" ]
         }
     }
 }
