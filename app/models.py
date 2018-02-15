@@ -1,5 +1,5 @@
 """Models for the ``app`` application."""
-from django.db import models
+from django.db import models, IntegrityError
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.postgres.fields import JSONField
@@ -30,6 +30,7 @@ class RiskField(models.Model):
 
     slug = models.SlugField(
         max_length=50,
+        unique=True,
         blank=True, null=True
     )
 
@@ -55,6 +56,8 @@ class RiskField(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
+        if RiskField.objects.filter(slug=self.slug).exists():
+            raise IntegrityError('Field exist with name: ', self.name)
         super(RiskField, self).save(*args, **kwargs)
 
 
