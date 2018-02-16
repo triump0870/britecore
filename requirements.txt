@@ -52,3 +52,4 @@ vine==1.1.4
 Werkzeug==0.12
 wsgi-request-logger==0.4.6
 zappa==0.45.1
+django-cors-headers==2.1.0

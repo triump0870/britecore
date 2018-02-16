@@ -1,15 +1,15 @@
 """Models for the ``app`` application."""
-from django.conf import settings
-from django.db import models
-from django.utils.timezone import localtime, now
+from django.db import models, IntegrityError
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.postgres.fields import JSONField
+from django.utils.text import slugify
 
 FIELDCHOICES = (
     ('text', 'Text'),
     ('number', 'Number'),
     ('date', 'Date'),
-    ('enum', 'Enum')
+    ('checkbox', 'Enum')
 )
 
 
@@ -28,11 +28,17 @@ class RiskField(models.Model):
         verbose_name=_('Name'),
     )
 
+    slug = models.SlugField(
+        max_length=50,
+        unique=True,
+        blank=True, null=True
+    )
+
     description = models.CharField(
         max_length=100,
         blank=True, null=True,
         verbose_name=_('Description'),
-        help_text=_('Type of the field')
+        help_text=_('Description for the risk field.')
     )
 
     type = models.CharField(
@@ -46,6 +52,13 @@ class RiskField(models.Model):
 
     def __str__(self):
         return '{0}'.format(self.name)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        if RiskField.objects.filter(slug=self.slug).exists():
+            raise IntegrityError('Field exist with name: ', self.name)
+        super(RiskField, self).save(*args, **kwargs)
 
 
 @python_2_unicode_compatible
@@ -71,7 +84,7 @@ class RiskType(models.Model):
     risk_fields = models.ManyToManyField(
         'app.RiskField',
         verbose_name=_('Risk fields'),
-        blank=True,
+        blank=True
     )
 
     class Meta:
@@ -103,6 +116,10 @@ class Risk(models.Model):
         verbose_name=_('Risk type'),
         related_name='risks',
     )
+
+    data = JSONField(default='{]',
+                     help_text=_('Data for the insurance. Default Null'),
+                     blank=True, null=True)
 
     def __str__(self):
         return str(self.pk)
