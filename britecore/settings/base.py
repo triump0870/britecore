@@ -15,13 +15,11 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 
 # Application definition
 
@@ -34,12 +32,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third-party apps
-    'payslip',
-    'bootstrapform',
-    'app'
+    'rest_framework',
+    'authtools',
+    'corsheaders',
+    'storages',
+
+    # Local apps
+    'app',
+    'apis'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -57,6 +61,7 @@ TEMPLATES = [
         'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
+            'debug': True,
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -87,8 +92,10 @@ if os.path.exists(env_file):
 # Raises ImproperlyConfigured exception if SECRET_KEY not in os.environ
 SECRET_KEY = env('SECRET_KEY')
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'w8qaylqdvi.execute-api.us-east-1.amazonaws.com']
-
+ALLOWED_HOSTS = ['localhost',
+                 '127.0.0.1',
+                 'w8qaylqdvi.execute-api.us-east-1.amazonaws.com',
+                 'ml7xnaw7c1.execute-api.us-east-2.amazonaws.com']
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
@@ -96,7 +103,6 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'w8qaylqdvi.execute-api.us-east-1.ama
 DATABASES = {
     'default': env.db()
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -116,7 +122,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -130,8 +135,19 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Authentication settings
+AUTH_USER_MODEL = 'authtools.User'
+
+# CORS settings
+CORS_ORIGIN_ALLOW_ALL = True
+# AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+# AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+# STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+# STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+# AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+# AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
