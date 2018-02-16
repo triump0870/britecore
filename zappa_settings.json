@@ -1,13 +1,26 @@
 {
     "dev": {
         "aws_region": "us-east-2",
-        "django_settings": "britecore.settings", 
-        "profile_name": "default", 
-        "project_name": "britecore", 
-        "runtime": "python2.7", 
+        "django_settings": "britecore.settings.dev_settings",
+        "profile_name": "default",
+        "project_name": "britecore",
+        "runtime": "python2.7",
         "s3_bucket": "zappa-britecore-2",
         "delete_local_zip": false,
         "exclude": ["dev_settings.py", "payslip/", "dockerize/"],
+        "vpc_config" : {
+            "SubnetIds": [ "subnet-1ce25851", "subnet-88aed3f3", "subnet-14d6e47d" ], // use the private subnet
+            "SecurityGroupIds": [ "sg-63c0600b" ]
+        }
+    },
+    "live": {
+        "aws_region": "us-east-2",
+        "django_settings": "britecore.settings.production",
+        "profile_name": "default",
+        "project_name": "britecore",
+        "runtime": "python2.7",
+        "s3_bucket": "zappa-britecore-2",
+        "exclude": ["dev_settings.py", "dockerize/"],
         "vpc_config" : {
             "SubnetIds": [ "subnet-1ce25851", "subnet-88aed3f3", "subnet-14d6e47d" ], // use the private subnet
             "SecurityGroupIds": [ "sg-63c0600b" ]
